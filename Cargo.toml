@@ -1,0 +1,42 @@
+[package]
+name = "optra"
+version = "0.1.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+description = "A GPU-accelerated HDR image viewer"
+
+[dependencies]
+egui = { version = "0.33.3"}
+egui-wgpu = { version = "0.33.3" }
+wgpu = { version = "27.0.1", features = [
+    "metal"
+]}
+
+eframe = { version = "0.33.0", default-features = false, features = [
+    "wgpu",
+    "android-game-activity",
+    "wayland",
+    "x11",
+] }
+env_logger = "0.11.8"
+bytemuck = "*"
+egui-file-dialog = "0.12.0"
+image = "0.25.9"
+catppuccin-egui = { version = "5.7.0", default-features = false, features = ["egui33"] }
+russh = "0.63"
+russh-sftp = "2.4"
+tokio = { version = "1.53.1", features = ["rt-multi-thread", "net", "macros", "io-util"] }
+
+# Pinned to the same versions winit 0.30 uses, so we get the same NSApplication
+# type and no duplicate objc2 in the tree.
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.5.2"
+objc2-app-kit = { version = "0.2.2", features = ["NSApplication", "NSResponder"] }
+objc2-foundation = { version = "0.2.2", features = [
+    "NSAppleEventDescriptor",
+    "NSAppleEventManager",
+    "NSNotification",
+    "NSArray",
+    "NSString",
+    "NSURL",
+] }

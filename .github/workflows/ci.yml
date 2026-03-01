@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - uses: Swatinem/rust-cache@v2
+
+      # eframe needs X11/Wayland and their input libraries at build time.
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libxkbcommon-dev libwayland-dev libxcb1-dev \
+            libxrandr-dev libxi-dev libxcursor-dev \
+            libgl1-mesa-dev pkg-config
+
+      - name: Build
+        run: cargo build --all-targets
+
+      # The test suite is pure logic -- sequence ordering, theme colours, EXR
+      # decoding -- so it runs fine on machines with no GPU. Rendering itself is
+      # NOT covered here; CI runners have no usable graphics adapter.
+      - name: Test
+        run: cargo test
+
+      - name: Clippy
+        run: cargo clippy --all-targets -- -D warnings
+
+      - name: Formatting
+        run: cargo fmt --check
