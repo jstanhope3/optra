@@ -48,8 +48,6 @@ image files: it claims `Owner` rank for OpenEXR and Radiance HDR, and
 `Alternate` for common formats like PNG and JPEG, so it appears under
 "Open With" without taking over from Preview.
 
-The signature is ad-hoc, not a Developer ID, so the bundle is not notarised —
-fine locally, but Gatekeeper will object if you pass it to someone else.
 
 ### Linux, or from source
 
@@ -128,19 +126,12 @@ cargo clippy --all-targets -- -D warnings
 cargo fmt --check
 ```
 
-CI runs the above on macOS and Linux. Note that GitHub runners have no usable
-GPU, so **CI verifies that the code compiles and that its logic is correct, but
-not that rendering works.** Test the display path on real hardware.
 
 ## License
-
-Licensed under either of
 
 - Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE))
 - MIT License ([LICENSE-MIT](LICENSE-MIT))
 
-at your option. This is the Rust ecosystem's conventional dual licensing.
+## AI Usage Disclosure
 
-Unless you explicitly state otherwise, any contribution intentionally submitted
-for inclusion in this work by you, as defined in the Apache-2.0 license, shall
-be dual licensed as above, without any additional terms or conditions.
+AI was partially used in the creation of this application: namely, in the remote SSH functionality and the bundling for MacOS.
